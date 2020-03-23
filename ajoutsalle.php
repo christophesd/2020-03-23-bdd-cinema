@@ -9,10 +9,16 @@
 <body>
 
     <?php 
+
+    // recuperation numéro de cinema
+    $cine = htmlspecialchars($_GET["nbcinema"]);
+    $selected[$cine] = "selected";
+
     // Init var
     $nbsalleErr = $capsalleErr = $nbcinemaErr = "";
     $nbsalle = $capsalle = $nbcinema = "";
     $validadd = $erroradd = "";
+    $selected[] = "";
 
     // Fontion test
     function test_input($data) {
@@ -47,6 +53,7 @@
         $nbcinemaErr = "(Association à un cinéma requis.)";
         } else {
             $nbcinema = test_input($_POST["nbcinema"]);
+            $selected[$nbcinema] = "selected";
             if (!filter_var($nbcinema, FILTER_VALIDATE_INT)) {
                 $nbcinemaErr = "(Format invalide.)";
             }
@@ -61,9 +68,9 @@
             include 'include/connexion.php';
 
             // Preparation requette
-            $requette = array($name,$city,$adress,$mail,$number);
-            $stmt = $bdd->prepare("INSERT INTO cinema (nom_cinema, ville_cinema, adresse_cinema, mail_cinema, telephone_cinema) 
-                                    VALUES (?, ?, ?, ?, ?)");
+            $requette = array($nbsalle,$capsalle,$nbcinema);
+            $stmt = $bdd->prepare("INSERT INTO salle (numero_salle, capacite_salle, id_cinema) 
+                                    VALUES (?, ?, ?)");
             foreach ($requette as $key => $value) {
                 $stmt->bindValue($key+1, $value);
             }
@@ -73,7 +80,7 @@
 
             // Message validation
             if($stmt) {
-                $validadd="Le cinema à bien été ajouté !";
+                $validadd="La salle à bien été ajouté !";
             } else{
                 $erroradd="Erreur d'envoie !";
             }
@@ -108,18 +115,18 @@
                 <td><label for="nbcinema">Cinéma : </label></td>
                 <td>
                     <select id="nbcinema" name="nbcinema" size="1">
-                        <option>Sélectionner un cinéma : </option>
+                        <option value="">Sélectionner un cinéma : </option>
                         <?php 
                         include 'include/connexion.php';
                         $namecinemas = $bdd->query('SELECT id_cinema, nom_cinema from cinema');
                         while ($namecinema = $namecinemas->fetch()) {
-                            echo '<option value="'.$namecinema[0].'">'.$namecinema[1].'</option>';
+                            echo '<option value="'.$namecinema[0].'" '.$selected[$namecinema[0]].'>'.$namecinema[1].'</option>';
                         }
-                        $cinemas->closeCursor();
+                        $namecinemas->closeCursor();
                         ?>
                     </select>
                 </td>
-                <td><label for="nbcinema"><?php echo $nbcinema;?> </label></td>
+                <td><label for="nbcinema"><?php echo $nbcinemaErr;?> </label></td>
             </tr>
             <tr>
                 <td colspan="2"><input type="submit" value="Envoyer"></td>
@@ -128,6 +135,7 @@
     </form>
 
 
+    <a href="infocinema.php?nbcinema=<?php echo $cine ?>"><h3>< Voir les salles</h3></a>
     <a href="index.php"><h3>< Voir les cinémas</h3></a>
 
 

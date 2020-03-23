@@ -32,7 +32,7 @@
         $cinemas = $bdd->query('SELECT * from cinema');
         while ($cinema = $cinemas->fetch()) {
             echo "<tr>";
-            echo "<td><a href='infocinema.php?".$cinema[0]."'>".$cinema[1]."</a></td>";
+            echo "<td><a href='infocinema.php?nbcinema=".$cinema[0]."'>".$cinema[1]."</a></td>";
             echo "<td>".$cinema[2]."</td>";
             echo "<td>".$cinema[3]."</td>";
             echo "<td>".$cinema[4]."</td>";
