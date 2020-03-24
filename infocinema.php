@@ -24,7 +24,7 @@
 
     <?php
         // recuperation numéro de cinema
-        $cine = htmlspecialchars($_GET["nbcinema"]);
+        $cine = htmlspecialchars($_GET["cine"]);
 
         // recup nom du cinema
         include 'include/connexion.php';
@@ -103,7 +103,7 @@
 
 
 
-    <a href="ajoutsalle.php?nbcinema=<?php echo $cine ?>"><h3>Ajouter une Salle ></h3></a>
+    <a href="ajoutsalle.php?cine=<?php echo $cine ?>"><h3>Ajouter une Salle ></h3></a>
     <a href="index.php"><h3>< Voir les cinémas</h3></a>
 
 </body>

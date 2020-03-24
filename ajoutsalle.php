@@ -10,15 +10,16 @@
 
     <?php 
 
-    // recuperation numéro de cinema
-    $cine = htmlspecialchars($_GET["nbcinema"]);
-    $selected[$cine] = "selected";
-
     // Init var
     $nbsalleErr = $capsalleErr = $nbcinemaErr = "";
     $nbsalle = $capsalle = $nbcinema = "";
     $validadd = $erroradd = "";
-    $selected[] = "";
+
+    // recuperation numéro de cinema
+    $cine = htmlspecialchars($_GET["cine"]);
+    $selected = array();
+    $selected[$cine] = "selected";
+
 
     // Fontion test
     function test_input($data) {
@@ -53,7 +54,9 @@
         $nbcinemaErr = "(Association à un cinéma requis.)";
         } else {
             $nbcinema = test_input($_POST["nbcinema"]);
+            $selected = array();
             $selected[$nbcinema] = "selected";
+            $cine = $nbcinema;
             if (!filter_var($nbcinema, FILTER_VALIDATE_INT)) {
                 $nbcinemaErr = "(Format invalide.)";
             }
@@ -80,7 +83,8 @@
 
             // Message validation
             if($stmt) {
-                $validadd="La salle à bien été ajouté !";
+                $validadd="La salle $nbsalle à bien été ajouté !";
+                $nbsalle = $capsalle = $nbcinema = "";
             } else{
                 $erroradd="Erreur d'envoie !";
             }
@@ -92,14 +96,13 @@
     ?>
 
 
-
     <div>
         <h1>Ajouter une Salle :</h1>
         <p style='color:red;'><?php echo $erroradd;?></p>
         <p style='color:green;'><?php echo $validadd;?></p>
     </div>
 
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]."?cine=".$cine);?>" method="post">
         <table>
             <tr>
                 <td><label for="nbsalle">Numéro de salle : </label></td>
@@ -115,7 +118,7 @@
                 <td><label for="nbcinema">Cinéma : </label></td>
                 <td>
                     <select id="nbcinema" name="nbcinema" size="1">
-                        <option value="">Sélectionner un cinéma : </option>
+                        <option value="">Sélectionner un cinéma.. : </option>
                         <?php 
                         include 'include/connexion.php';
                         $namecinemas = $bdd->query('SELECT id_cinema, nom_cinema from cinema');
@@ -135,7 +138,7 @@
     </form>
 
 
-    <a href="infocinema.php?nbcinema=<?php echo $cine ?>"><h3>< Voir les salles</h3></a>
+    <a href="infocinema.php?cine=<?php echo $cine ?>"><h3>< Voir les salles</h3></a>
     <a href="index.php"><h3>< Voir les cinémas</h3></a>
 
 
