@@ -29,7 +29,8 @@
         <th>Numéro de téléphone : </th>
         <?php 
         include 'include/connexion.php';
-        $cinemas = $bdd->query('SELECT * from cinema');
+        $cinemas = $bdd->prepare('SELECT * from cinema');
+        $cinemas->execute();
         while ($cinema = $cinemas->fetch()) {
             echo "<tr>";
             echo "<td><a href='infocinema.php?cine=".$cinema[0]."'>".$cinema[1]."</a></td>";

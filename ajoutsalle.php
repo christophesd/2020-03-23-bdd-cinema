@@ -52,6 +52,7 @@
         
         if (empty($_POST["nbcinema"])) {
         $nbcinemaErr = "(Association à un cinéma requis.)";
+        $selected = array();
         } else {
             $nbcinema = test_input($_POST["nbcinema"]);
             $selected = array();
@@ -121,7 +122,8 @@
                         <option value="">Sélectionner un cinéma.. : </option>
                         <?php 
                         include 'include/connexion.php';
-                        $namecinemas = $bdd->query('SELECT id_cinema, nom_cinema from cinema');
+                        $namecinemas = $bdd->prepare('SELECT id_cinema, nom_cinema from cinema');
+                        $namecinemas->execute();
                         while ($namecinema = $namecinemas->fetch()) {
                             echo '<option value="'.$namecinema[0].'" '.$selected[$namecinema[0]].'>'.$namecinema[1].'</option>';
                         }

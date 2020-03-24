@@ -28,13 +28,15 @@
 
         // recup nom du cinema
         include 'include/connexion.php';
-        $cinemas = $bdd->query('SELECT * from cinema WHERE id_cinema = "'.$cine.'"');
+        $cinemas = $bdd->prepare('SELECT * from cinema WHERE id_cinema = "'.$cine.'"');
+        $cinemas->execute();
         $cinema = $cinemas->fetch();
         $name = $cinema[1];
         $cinemas->closeCursor();
 
         // recep salles
-        $salles = $bdd->query('SELECT * from salle WHERE id_cinema = "'.$cine.'"');
+        $salles = $bdd->prepare('SELECT * from salle WHERE id_cinema = "'.$cine.'"');
+        $salles->execute();
         while ($salle = $salles->fetch()) {
             $nbsalle++;
             $salleid[] = $salle[0];
@@ -56,7 +58,8 @@
         }
 
         // nom des équipements
-        $nameequipements = $bdd->query('SELECT * from equipement');
+        $nameequipements = $bdd->prepare('SELECT * from equipement');
+        $nameequipements->execute();
         while ($nameequipement = $nameequipements->fetch()) {
             $equipementname[$nameequipement[0]] = $nameequipement[1];
         }
